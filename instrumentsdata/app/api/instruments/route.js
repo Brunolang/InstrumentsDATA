@@ -1,4 +1,5 @@
 export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 import { sql } from '@vercel/postgres';
 import { put } from '@vercel/blob';
@@ -14,27 +15,27 @@ export async function GET() {
   }
 }
 
-// POST: Guardar un nuevo instrumento
+// POST: Registrar un nuevo instrumento
 export async function POST(request) {
   try {
     const formData = await request.formData();
     const usuario = formData.get('usuario');
     const instrumento = formData.get('instrumento');
-    const nroParte = formData.get('nroParte');
-    const nroSerie = formData.get('nroSerie');
+    const nro_parte = formData.get('nro_parte');
+    const nro_serie = formData.get('nro_serie');
     const foto = formData.get('foto');
 
-    if (!usuario || !instrumento || !nroParte || !nroSerie || !foto) {
+    if (!usuario || !instrumento || !nro_parte || !nro_serie || !foto) {
       return NextResponse.json({ error: 'Todos los campos son obligatorios' }, { status: 400 });
     }
 
     // Subir imagen a Vercel Blob
     const blob = await put(foto.name, foto, { access: 'public' });
 
-    // Insertar en Vercel Postgres
+    // Insertar registro en Vercel Postgres
     await sql`
       INSERT INTO instrumentos (usuario, instrumento, nro_parte, nro_serie, foto_url)
-      VALUES (${usuario}, ${instrumento}, ${nroParte}, ${nroSerie}, ${blob.url});
+      VALUES (${usuario}, ${instrumento}, ${nro_parte}, ${nro_serie}, ${blob.url});
     `;
 
     return NextResponse.json({ message: 'Instrumento registrado exitosamente' }, { status: 200 });
