@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const { rows } = await sql`SELECT * FROM instrumentos ORDER BY fecha DESC;`;
+    const { rows } = await sql`SELECT * FROM instruments ORDER BY created_at DESC;`;
     return NextResponse.json(rows, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -27,10 +27,15 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Todos los campos son obligatorios' }, { status: 400 });
     }
 
-    const blob = await put(foto.name, foto, { access: 'private' });
+    // Guardado privado y con sufijo aleatorio para evitar colisiones
+    const blob = await put(foto.name, foto, { 
+      access: 'private',
+      addRandomSuffix: true 
+    });
 
+    // Mapeo exacto a las columnas de la tabla en Postgres
     await sql`
-      INSERT INTO instrumentos (usuario, instrumento, nro_parte, nro_serie, foto_url)
+      INSERT INTO instruments (user_name, instrument, part_number, serial_number, image_url)
       VALUES (${usuario}, ${instrumento}, ${nro_parte}, ${nro_serie}, ${blob.url});
     `;
 
