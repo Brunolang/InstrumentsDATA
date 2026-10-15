@@ -9,7 +9,7 @@ export async function GET() {
   try {
     const { rows } = await sql`SELECT * FROM instruments ORDER BY created_at DESC;`;
 
-    // Mapeamos los datos para la interfaz
+    // Mapeamos los campos a la estructura que espera tu página
     const instrumentosFormat = rows.map((item) => ({
       id: item.id,
       usuario: item.user_name,
@@ -39,7 +39,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Todos los campos son obligatorios' }, { status: 400 });
     }
 
-    // Usamos access: 'public' y addRandomSuffix para evitar Forbidden y colisiones
+    // Subida pública directa a tu nuevo Blob Store
     const blob = await put(foto.name, foto, { 
       access: 'public',
       addRandomSuffix: true 
