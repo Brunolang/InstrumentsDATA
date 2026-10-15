@@ -27,7 +27,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Todos los campos son obligatorios' }, { status: 400 });
     }
 
-    const blob = await put(foto.name, foto, { access: 'public' });
+    const blob = await put(foto.name, foto, { access: 'private' });
 
     await sql`
       INSERT INTO instrumentos (usuario, instrumento, nro_parte, nro_serie, foto_url)
