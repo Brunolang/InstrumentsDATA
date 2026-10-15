@@ -154,68 +154,54 @@ export default function Home() {
                   accept="image/*"
                   onChange={handleFileChange}
                   required
-                  style={{ marginTop: '0.25rem' }}
+                  style={{ display: 'block', marginTop: '0.25rem' }}
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                style={{
-                  backgroundColor: loading ? '#9ca3af' : '#2563eb',
-                  color: 'white',
-                  padding: '0.6rem',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  fontWeight: 'bold',
-                }}
+                style={{ padding: '0.75rem', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '4px', cursor: loading ? 'wait' : 'pointer' }}
               >
                 {loading ? 'Guardando...' : 'Guardar Instrumento'}
               </button>
-
-              {mensaje && (
-                <p style={{ marginTop: '0.5rem', color: mensaje.includes('éxito') ? '#16a34a' : '#dc2626', fontSize: '0.875rem' }}>
-                  {mensaje}
-                </p>
-              )}
+              {mensaje && <p role="status">{mensaje}</p>}
             </form>
           </div>
 
-          {/* Tabla de registros */}
-          <div style={{ background: '#ffffff', padding: '1.5rem', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', overflowX: 'auto' }}>
-            <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Instrumentos Registrados</h2>
+          <section style={{ background: '#ffffff', padding: '1.5rem', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+            <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Instrumentos registrados</h2>
             {instrumentos.length === 0 ? (
-              <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>No hay registros cargados aún.</p>
+              <p>No hay instrumentos registrados.</p>
             ) : (
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.875rem' }}>
-                <thead>
-                  <tr style={{ borderBottom: '2px solid #e5e7eb', background: '#f9fafb' }}>
-                    <th style={{ padding: '0.5rem' }}>Usuario</th>
-                    <th style={{ padding: '0.5rem' }}>Instrumento</th>
-                    <th style={{ padding: '0.5rem' }}>Nro. Parte</th>
-                    <th style={{ padding: '0.5rem' }}>Nro. Serie</th>
-                    <th style={{ padding: '0.5rem' }}>Imagen</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {instrumentos.map((item) => (
-                    <tr key={item.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                      <td style={{ padding: '0.5rem' }}>{item.usuario}</td>
-                      <td style={{ padding: '0.5rem' }}>{item.instrumento}</td>
-                      <td style={{ padding: '0.5rem' }}>{item.nro_parte}</td>
-                      <td style={{ padding: '0.5rem' }}>{item.nro_serie}</td>
-                      <td style={{ padding: '0.5rem' }}>
-                        <a href={item.foto_url} target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'underline' }}>
-                          Ver Foto
-                        </a>
-                      </td>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr>
+                      <th>Usuario</th>
+                      <th>Instrumento</th>
+                      <th>Nro. de Parte</th>
+                      <th>Nro. de Serie</th>
+                      <th>Foto</th>
+                      <th>Fecha</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {instrumentos.map((item) => (
+                      <tr key={item.id}>
+                        <td>{item.usuario}</td>
+                        <td>{item.instrumento}</td>
+                        <td>{item.nro_parte}</td>
+                        <td>{item.nro_serie}</td>
+                        <td>{item.foto_url && <a href={item.foto_url} target="_blank" rel="noreferrer">Ver foto</a>}</td>
+                        <td>{item.fecha}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
-          </div>
+          </section>
         </div>
       </div>
     </main>
